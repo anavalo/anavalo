@@ -17,6 +17,13 @@ jobs:
           username: fable6
           platform: lichess
 
+      - uses: Platane/snk/svg-only@d8f6715049803e982ee5ff501b6b9b7d5deeb09b # v3.5.0
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/github-snake.svg
+            dist/github-snake-dark.svg?palette=github-dark
+
       - name: Publish SVGs to the chess-output branch
         run: |
           cd dist
@@ -25,6 +32,6 @@ jobs:
           git add .
           git -c user.name="github-actions[bot]" \
               -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
-              commit -q -m "Update chess replay"
+              commit -q -m "Update profile images"
           git push -q --force \
             "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" chess-output
