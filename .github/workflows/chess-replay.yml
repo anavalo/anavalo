@@ -1,0 +1,30 @@
+name: chess-replay
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: suryapartapsinghh/chess-replay-card@f019c00f6a9679ddadc50505819d32fd826826f3 # v1.0.0
+        with:
+          username: fable6
+          platform: lichess
+
+      - name: Publish SVGs to the chess-output branch
+        run: |
+          cd dist
+          git init -q
+          git checkout -q -b chess-output
+          git add .
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "Update chess replay"
+          git push -q --force \
+            "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" chess-output
